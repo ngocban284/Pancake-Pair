@@ -7,14 +7,13 @@
 const hre = require("hardhat");
 
 async function main() {
-  //deploy the contract
-  // const [owner] = await hre.ethers.getSigners();
+  // deploy the contract
+  const _Factory = "0x346CB84cdF074855Df9d4f1B080a8eeEDb8Ac8dd";
+  const _WETH = "0xF524F9A7d8fE9D79Fb6b2Ec2ca13782f27EdBfB3";
   const PancakeRouter = await hre.ethers.getContractFactory("PancakeRouter");
-  const PancakeRouterInstance = await PancakeRouter.deploy(
-    "0x346CB84cdF074855Df9d4f1B080a8eeEDb8Ac8dd",
-    "0xF524F9A7d8fE9D79Fb6b2Ec2ca13782f27EdBfB3"
-  );
-  await PancakeRouterInstance.deployed();
+  const PancakeRouterInstance = await PancakeRouter.deploy(_Factory, _WETH);
+
+  console.log(await PancakeRouterInstance.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
