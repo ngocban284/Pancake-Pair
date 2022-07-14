@@ -7,18 +7,22 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  const [owner] = await hre.ethers.getSigners();
+  // console.log(owner);
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  const PancakeFactoryAddress = "0xB9A7DbcCBEb41F0E07170987338f951eE3644Bff";
+  const PancakeFactory = await hre.ethers.getContractAt(
+    "PancakeFactory",
+    PancakeFactoryAddress
+  );
+  // console.log(PancakeFactory);
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log("Lock with 1 ETH deployed to:", lock.address);
+  const PancakeRouterAddress = "0xa5245A15a79af7Fb38CC098493307774F8EF271a";
+  const PancakeRouter = await hre.ethers.getContractAt(
+    "PancakeRouter",
+    PancakeRouterAddress
+  );
+  console.log(PancakeRouter);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
