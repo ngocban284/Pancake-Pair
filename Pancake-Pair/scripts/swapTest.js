@@ -13,6 +13,34 @@ const PolkadotAbi = require("../abi/PolkadotAbi.json");
 const SolanaAbi = require("../abi/SolanaAbi.json");
 const { ethers } = require("hardhat");
 
+// const owner = "0x595622cBd0Fc4727DF476a1172AdA30A9dDf8F43";
+
+const poolTokenAdressArray = [
+  [
+    "0x3703DC4F1272BF8da5d4d113E3249687A22A0bb9",
+    "0xc9526760C889B88ace3F260B3056586D99862000",
+  ],
+  [
+    "0x0BFFAaC246B2Fc5860aB63283297640492B9Ff34",
+    "0x86E38220DBa5B34b50e0B035E145A75ecd93B196",
+  ],
+  [
+    "0xc9526760C889B88ace3F260B3056586D99862000",
+    "0x0BFFAaC246B2Fc5860aB63283297640492B9Ff34",
+  ],
+  [
+    "0x3703DC4F1272BF8da5d4d113E3249687A22A0bb9",
+    "0x86E38220DBa5B34b50e0B035E145A75ecd93B196",
+  ],
+];
+
+const amountArray = [
+  [ethers.utils.parseEther("100"), ethers.utils.parseEther("90")],
+  [ethers.utils.parseEther("200"), ethers.utils.parseEther("190")],
+  [ethers.utils.parseEther("300"), ethers.utils.parseEther("290")],
+  [ethers.utils.parseEther("400"), ethers.utils.parseEther("390")],
+];
+
 async function main() {
   //get owner accounts
   const [owner] = await hre.ethers.getSigners();
@@ -86,89 +114,48 @@ async function main() {
     ethers.utils.parseEther("100000000000")
   );
 
-  // user approve router to spend tokens
-  await BTC.connect(owner).approve(
-    PancakeRouter.address,
-    ethers.utils.parseEther("10000000000")
-  );
-  await BUSD.connect(owner).approve(
-    PancakeRouter.address,
-    ethers.utils.parseEther("10000000000")
-  );
-  await DOT.connect(owner).approve(
-    PancakeRouter.address,
-    ethers.utils.parseEther("10000000000")
-  );
-  await SOL.connect(owner).approve(
-    PancakeRouter.address,
-    ethers.utils.parseEther("10000000000")
-  );
+  /*
+   BTC-BUSD :0x01ed9d8b180eEB66F3c58eDB159F69f6d90827C9
 
-  // add Liquidity to pair
-  // await PancakeRouter.addLiquidity(
-  //   BTC.address,
-  //   SOL.address,
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   owner.address,
-  //   Math.floor(Date.now() / 1000) + 60 * 10
-  // );
-  //0x3d90e7e8d158bf1e738dc7902e2d365f6f0dc71d51ab5c6fe57e97fdcf0dab3c
+    DOT-SOL:0xe342DeC5a6820E302543cca7C8c70176FA7297c8
 
-  // await PancakeRouter.addLiquidity(
-  //   BUSD.address,
-  //   DOT.address,
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   owner.address,
-  //   Math.floor(Date.now() / 1000) + 60 * 10
-  // );
-  //0x9f0ac8af65084aedf73c8a1e6445b78a8168c1a5130ca31d9c0eeca5eea97c4e
+    BUSD-DOT:0x0B0B321aF6B0CD590bab3C3ac9701D6cf76b9deB
 
-  // await PancakeRouter.addLiquidity(
-  //   DOT.address,
-  //   SOL.address,
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   owner.address,
-  //   Math.floor(Date.now() / 1000) + 60 * 10
-  // );
-  //0xb67451b7907f5ba95daa1a1926ca4bd1a64dd3011b2d3a36ae42d66551abf53d
+    BTC-SOL:0xEE40a285c7Dcc75012Ac00Db055ea5f07FBD59E6
+    */
 
-  // await PancakeRouter.addLiquidity(
-  //   BTC.address,
-  //   BUSD.address,
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   owner.address,
-  //   Math.floor(Date.now() / 1000) + 60 * 10
-  // );
-  //0x9dd107ca9fffe83dc0081e22bc07249b89ae035c22e15d8e6f942d4addc82419
+  //swap tokens
+  //   const tx = await PancakeRouter.swapExactTokensForTokens(
+  //     ethers.utils.parseEther("100"),
+  //     ethers.utils.parseEther("90"),
+  //     [DOT.address, SOL.address],
+  //     owner.address,
+  //     Math.floor(Date.now() / 1000) + 60 * 10
+  //   );
 
-  //get pair
-  const pair1 = await PancakeFactory.getPair(BTC.address, SOL.address);
-  // console.log(pair1);
+  async function randomRuntime() {
+    var min = 1,
+      max = 60;
 
-  // const pair2 = await PancakeFactory.getPair(BUSD.address, DOT.address);
-  // console.log(pair2);
+    var rand = Math.floor(Math.random() * (max - min + 1) + min); //Generate Random number between 5 - 10
+    var i = rand % 4;
 
-  // const pair3 = await PancakeFactory.getPair(DOT.address, SOL.address);
-  // console.log(pair3);
+    const tx = await PancakeRouter.swapExactTokensForTokens(
+      amountArray[i][0],
+      amountArray[i][1],
+      poolTokenAdressArray[i],
+      owner.address,
+      Math.floor(Date.now() / 1000) + 60 * 10
+    );
 
-  // const pair4 = await PancakeFactory.getPair(BTC.address, BUSD.address);
-  // console.log(pair4);
+    console.log("next transaction will be created in " + rand + " seconds");
 
-  //check balance of pair
-  const pair1Balance = await pair1.balanceOf(owner.address);
-  console.log(pair1Balance);
+    setTimeout(randomRuntime, rand * 1000);
+  }
+
+  randomRuntime();
+
+  //   console.log(tx);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
