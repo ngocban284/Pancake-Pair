@@ -8,7 +8,7 @@ module.exports = {
       chainId: 97,
       gas: 6500000,
       gasPrice: 20000000000,
-      accounts: [`${process.env.ACCOUNT_0}`],
+      accounts: [`${process.env.PRIVATE_KEY}`],
     },
   },
   solidity: "0.8.0",
