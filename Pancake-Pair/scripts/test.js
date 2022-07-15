@@ -11,6 +11,7 @@ const BitCoinAbi = require("../abi/BitCoinAbi.json");
 const BUSDAbi = require("../abi/BUSDAbi.json");
 const PolkadotAbi = require("../abi/PolkadotAbi.json");
 const SolanaAbi = require("../abi/SolanaAbi.json");
+const NearAbi = require("../abi/NearAbi.json");
 const { ethers } = require("hardhat");
 
 async function main() {
@@ -43,14 +44,21 @@ async function main() {
   const SolanaAddress = "0x86E38220DBa5B34b50e0B035E145A75ecd93B196";
   const SOL = await hre.ethers.getContractAt(SolanaAbi, SolanaAddress);
 
+  const NearAddress = "0xC0e735887cb70c53fA931273C32a9770383d3Fa3";
+  const NEAR = await hre.ethers.getContractAt(NearAbi, NearAddress);
+
   //transfer token to owner
   // await BTC.transfer(owner.address, ethers.utils.parseEther("10000000000"));
   // await BUSD.transfer(owner.address, ethers.utils.parseEther("10000000000"));
   // await DOT.transfer(owner.address, ethers.utils.parseEther("10000000000"));
   // await SOL.transfer(owner.address, ethers.utils.parseEther("10000000000"));
+  // await NEAR.transfer(owner.address, ethers.utils.parseEther("10000000000"));
 
   // create pair
-  // const pair1Adress = await PancakeFactory.createPair(BTC.address, SOL.address);
+  // const pair1Adress = await PancakeFactory.createPair(
+  //   BUSD.address,
+  //   SOL.address
+  // );
   // 0x6623e68e060dd895909a1f00b8f86866430280561f4c275b9222303d755931fb
 
   // const pair2Adress = await PancakeFactory.createPair(
@@ -59,7 +67,10 @@ async function main() {
   // );
   // 0xf3cee9d13be68984ecbc2ddfc9c503cd2e606298470c2b7fc7d634d7696400d0
 
-  // const pair3Adress = await PancakeFactory.createPair(DOT.address, SOL.address);
+  const pair3Adress = await PancakeFactory.createPair(
+    NEAR.address,
+    BUSD.address
+  );
   // 0x862cebd63b9ddb709c2a95e2982e6c79fad6ac93cbfe135aae9f9e0eabb1efe7
 
   // const pair4Adress = await PancakeFactory.createPair(
@@ -86,6 +97,11 @@ async function main() {
     ethers.utils.parseEther("100000000000")
   );
 
+  await NEAR.approve(
+    PancakeRouter.address,
+    ethers.utils.parseEther("100000000000")
+  );
+
   // user approve router to spend tokens
   await BTC.connect(owner).approve(
     PancakeRouter.address,
@@ -103,10 +119,14 @@ async function main() {
     PancakeRouter.address,
     ethers.utils.parseEther("10000000000")
   );
+  await NEAR.connect(owner).approve(
+    PancakeRouter.address,
+    ethers.utils.parseEther("10000000000")
+  );
 
   // add Liquidity to pair
   // await PancakeRouter.addLiquidity(
-  //   BTC.address,
+  //   BUSD.address,
   //   SOL.address,
   //   ethers.utils.parseEther("5000000000"),
   //   ethers.utils.parseEther("5000000000"),
@@ -117,16 +137,16 @@ async function main() {
   // );
   //0x3d90e7e8d158bf1e738dc7902e2d365f6f0dc71d51ab5c6fe57e97fdcf0dab3c
 
-  // await PancakeRouter.addLiquidity(
-  //   BUSD.address,
-  //   DOT.address,
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   ethers.utils.parseEther("5000000000"),
-  //   owner.address,
-  //   Math.floor(Date.now() / 1000) + 60 * 10
-  // );
+  await PancakeRouter.addLiquidity(
+    BUSD.address,
+    NEAR.address,
+    ethers.utils.parseEther("5000000000"),
+    ethers.utils.parseEther("5000000000"),
+    ethers.utils.parseEther("5000000000"),
+    ethers.utils.parseEther("5000000000"),
+    owner.address,
+    Math.floor(Date.now() / 1000) + 60 * 10
+  );
   //0x9f0ac8af65084aedf73c8a1e6445b78a8168c1a5130ca31d9c0eeca5eea97c4e
 
   // await PancakeRouter.addLiquidity(
@@ -154,21 +174,20 @@ async function main() {
   //0x9dd107ca9fffe83dc0081e22bc07249b89ae035c22e15d8e6f942d4addc82419
 
   //get pair
-  const pair1 = await PancakeFactory.getPair(BTC.address, SOL.address);
+  // const pair1 = await PancakeFactory.getPair(BUSD.address, SOL.address);
   // console.log(pair1);
 
   // const pair2 = await PancakeFactory.getPair(BUSD.address, DOT.address);
   // console.log(pair2);
 
-  // const pair3 = await PancakeFactory.getPair(DOT.address, SOL.address);
+  // const pair3 = await PancakeFactory.getPair(NEAR.address, BUSD.address);
   // console.log(pair3);
 
   // const pair4 = await PancakeFactory.getPair(BTC.address, BUSD.address);
   // console.log(pair4);
 
   //check balance of pair
-  const pair1Balance = await pair1.balanceOf(owner.address);
-  console.log(pair1Balance);
+  // const pair1Balance = await pair1.balanceOf(owner.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

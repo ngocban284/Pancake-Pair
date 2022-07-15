@@ -5,15 +5,18 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
+var ethers = require("ethers");
+var provider = ethers.providers.getDefaultProvider();
 
 async function main() {
   // deploy the contract
-  const _Factory = "0x346CB84cdF074855Df9d4f1B080a8eeEDb8Ac8dd";
-  const _WETH = "0xF524F9A7d8fE9D79Fb6b2Ec2ca13782f27EdBfB3";
-  const PancakeRouter = await hre.ethers.getContractFactory("PancakeRouter");
-  const PancakeRouterInstance = await PancakeRouter.deploy(_Factory, _WETH);
-
-  console.log(await PancakeRouterInstance.address);
+  var transactionHash =
+    "0x7baea23e7d77bff455d94f0c81916f938c398252fb62fce2cdb43643134ce4ed";
+  provider
+    .getTransactionReceipt(transactionHash)
+    .then(function (transactionReceipt) {
+      console.log(transactionReceipt);
+    });
 }
 
 // We recommend this pattern to be able to use async/await everywhere
